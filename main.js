@@ -1,6 +1,6 @@
 //create a GameBoard object with gameboard array.
 const gameBoard = (function () {
-    const board  = ["","","","","","","","","",];
+    let board  = ["","","","","","","","","",];
 
     const printBoard = () => {
         console.log(`
@@ -12,7 +12,12 @@ const gameBoard = (function () {
         `);
     };
 
-    return {board, printBoard}
+    // resets board to being empty
+    let resetBoard = () => {
+         return board = ["","","","","","","","","",];
+    };
+
+    return {board, printBoard, resetBoard}
 })();
 
 //create factory function that returns an object for the player and 
@@ -39,4 +44,26 @@ const gameFlow = function () {
             board[index] = mark;
         }
     }
+
+    
+
+    // check for winner after a move has been played
+    function checkWinner () {
+        
+        const winPatterns = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+            [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
+            [0, 4, 8], [2, 4, 6]             // Diagonals
+        ];
+        
+        //iterates through winPatterns arrays elements and checks if the game board matches any of the winning patterns presented
+        for (let pattern of winPatterns) {
+            const [a,b,c] = pattern;
+            if(board[a] === board[b] && board[a] === board[c] && board[b] === board[c]) {
+            console.log(`${currentPlayer} wins!`)
+        }
+    }
+
+    }
 }
+
