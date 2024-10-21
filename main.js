@@ -1,5 +1,5 @@
 //create a GameBoard object with gameboard array.
-const gameBoard = (function () {
+const gameBoard = function () {
     let board  = ["","","","","","","","","",];
 
     const printBoard = () => {
@@ -17,8 +17,20 @@ const gameBoard = (function () {
          return board = ["","","","","","","","","",];
     };
 
-    return {board, printBoard, resetBoard}
-})();
+    // get current state of the board array
+    const getBoard = () => board;
+
+     // set marker on a chosen square by the player
+     const setMarker = (index, mark) => {
+        if (board[index] === "") {
+            board[index] = mark;
+            return true;
+        }
+        return false;
+    }
+
+    return {board, printBoard, resetBoard, setMarker, getBoard}
+};
 
 //create factory function that returns an object for the player and 
 const createPlayer = function (name, sign ) {
@@ -27,25 +39,25 @@ const createPlayer = function (name, sign ) {
 
 //create factory function to control flow of game
 const gameFlow = function () {
-    const board = gameBoard.board;
+
+    const board = gameBoard();
+
     //create two players and assign the marks they will be using
     const player1 = createPlayer('Player 1', "x");
     const player2 = createPlayer('Player 2', "o");
+    
     //set current player
     let currentPlayer  = player1;
+    
     //switches currentPlayer
     const switchPlayer = () => {
-        currentPlayer === player1 ? currentPlayer = player2 : currentPlayer = player1;
+        if(currentPlayer === player1) {
+            currentPlayer = player2
+        } else currentPlayer = player1
         return currentPlayer;
     }
-    // set marker on a chosen square by the player
-    const setMarker = function (index, mark) {
-        if (board[index] === "") {
-            board[index] = mark;
-        }
-    }
-
     
+   
 
     // check for winner after a move has been played
     function checkWinner () {
@@ -55,15 +67,48 @@ const gameFlow = function () {
             [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
             [0, 4, 8], [2, 4, 6]             // Diagonals
         ];
-        
+        const b = board.getBoard();
         //iterates through winPatterns arrays elements and checks if the game board matches any of the winning patterns presented
         for (let pattern of winPatterns) {
-            const [a,b,c] = pattern;
-            if(board[a] === board[b] && board[a] === board[c] && board[b] === board[c]) {
-            console.log(`${currentPlayer} wins!`)
+                const [x,y,z] = pattern;
+                if(b[x] && b[x] === b[y] && b[x] === b[z]) {
+                return currentPlayer;
+            }   
         }
+        return null;
     }
 
+    // check if board is full
+        const boardFull = () => {
+            return board.getBoard().every(square => square !== "");
+        }
+    
+    // plays a round of tic-tac-toe
+    const playRound = function (index) {
+        if(board.setMarker(index,currentPlayer.sign)) {
+            board.printBoard();
+            const winner = checkWinner();
+            if(winner) {
+                console.log(`${currentPlayer.name} is the winner!`);
+                return
+            }
+            if (boardFull()) {
+                console.log("It's a tie!");
+                return;
+            }
+             switchPlayer();
+        }
+        else console.log("Invalid move! Try again.");
     }
+    // resets game by emptying board and changing currentPlayer back to player1
+    const resetGame = () => {
+        board.resetBoard();
+        currentPlayer = player1;
+        console.log("Game has been reset!");
+    };
+
+    return {playRound, resetGame, switchPlayer};
 }
+
+const game = gameFlow();
 
