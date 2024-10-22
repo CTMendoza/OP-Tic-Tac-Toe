@@ -1,0 +1,54 @@
+body {
+    height: 100vh;
+    margin: 0px;
+    background-color: #3E92CC;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+h1 {
+    margin: 10px;
+    text-align: center;
+}
+
+.board {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    height: 500px;
+    width: 500px;
+}
+
+.tile {
+    border: solid;
+}
+
+
+.tile[data-index="0"],
+.tile[data-index="1"],
+.tile[data-index="2"]  {
+    border-top-width: 0px;
+    border-bottom-width: 1px;
+}
+
+
+.tile[data-index="0"],
+.tile[data-index="3"],
+.tile[data-index="6"]  {
+    border-left-width: 0px;
+}
+
+.tile[data-index="2"],
+.tile[data-index="5"],
+.tile[data-index="8"] {
+    border-right-width: 0px;
+}
+
+.tile[data-index="6"],
+.tile[data-index="7"],
+.tile[data-index="8"] {
+    border-bottom-width: 0px;
+}
+
