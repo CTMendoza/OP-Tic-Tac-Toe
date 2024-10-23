@@ -87,6 +87,7 @@ const gameFlow = function () {
     const playRound = function (index) {
         if(board.setMarker(index,currentPlayer.sign)) {
             board.printBoard();
+            tiles[index].textContent = `${currentPlayer.sign}`;
             const winner = checkWinner();
             if(winner) {
                 console.log(`${currentPlayer.name} is the winner!`);
@@ -107,8 +108,22 @@ const gameFlow = function () {
         console.log("Game has been reset!");
     };
 
-    return {playRound, resetGame, switchPlayer};
+    return {playRound, resetGame, switchPlayer, currentPlayer};
 }
 
 const game = gameFlow();
 
+const board = document.querySelector('.board');
+
+const tiles = Array.from(document.getElementsByClassName('tile'));
+
+console.log(tiles);
+
+tiles.forEach((tile, index) => {
+    tile.addEventListener('click', () => {
+        console.log(`clicked tile ${tile} `);
+        game.playRound(index);
+    })
+})
+
+  

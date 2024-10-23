@@ -23,6 +23,8 @@ h1 {
 
 .tile {
     border: solid;
+    font-size: 110px;
+    text-align: center;
 }
 
 
