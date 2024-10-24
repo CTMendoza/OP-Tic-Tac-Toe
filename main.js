@@ -1,4 +1,5 @@
 //create a GameBoard object with gameboard array.
+
 const gameBoard = function () {
     let board  = ["","","","","","","","","",];
 
@@ -89,17 +90,32 @@ const gameFlow = function () {
             board.printBoard();
             tiles[index].textContent = `${currentPlayer.sign}`;
             const winner = checkWinner();
+
+            if (!message) {
+                message = document.createElement('h2');
+                body.insertBefore(message, boardElement);  // Insert it only once
+            }
+
             if(winner) {
+               message.textContent = `${currentPlayer.name} is the winner!`;
                 console.log(`${currentPlayer.name} is the winner!`);
                 return
             }
             if (boardFull()) {
+                message.textContent = "It's a tie!";
                 console.log("It's a tie!");
                 return;
             }
              switchPlayer();
         }
-        else console.log("Invalid move! Try again.");
+        else {
+            if (!message) {
+                message = document.createElement('h2');
+                body.insertBefore(message, boardElement);  // Insert it only once
+            }
+            message.textContent = "Invalid move! Try again.";
+            console.log("Invalid move! Try again.");
+        }
     }
     // resets game by emptying board and changing currentPlayer back to player1
     const resetGame = () => {
@@ -113,7 +129,9 @@ const gameFlow = function () {
 
 const game = gameFlow();
 
-const board = document.querySelector('.board');
+let message = null;
+const boardElement = document.querySelector('.board');
+const body = document.querySelector('body');
 
 const tiles = Array.from(document.getElementsByClassName('tile'));
 
