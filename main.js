@@ -34,8 +34,8 @@ const gameBoard = function () {
 };
 
 //create factory function that returns an object for the player and 
-const createPlayer = function (name, sign ) {
-    return { name, sign };
+const createPlayer = function (name, sign, color ) {
+    return { name, sign, color };
 }
 
 //create factory function to control flow of game
@@ -44,8 +44,8 @@ const gameFlow = function () {
     const board = gameBoard();
 
     //create two players and assign the marks they will be using
-    const player1 = createPlayer('Player 1', "x");
-    const player2 = createPlayer('Player 2', "o");
+    const player1 = createPlayer('Player 1', "x", "#235789");
+    const player2 = createPlayer('Player 2', "o", "#F1D302");
     
     //set current player
     let currentPlayer  = player1;
@@ -89,15 +89,17 @@ const gameFlow = function () {
         if(board.setMarker(index,currentPlayer.sign)) {
             board.printBoard();
             tiles[index].textContent = `${currentPlayer.sign}`;
+            tiles[index].style.color = currentPlayer.color;
             const winner = checkWinner();
 
             if (!message) {
                 message = document.createElement('h2');
-                body.insertBefore(message, boardElement);  // Insert it only once
+                body.insertBefore(message, boardElement);
             }
 
             if(winner) {
                message.textContent = `${currentPlayer.name} is the winner!`;
+               message.style.color = currentPlayer.color;
                 console.log(`${currentPlayer.name} is the winner!`);
                 return
             }
@@ -111,7 +113,7 @@ const gameFlow = function () {
         else {
             if (!message) {
                 message = document.createElement('h2');
-                body.insertBefore(message, boardElement);  // Insert it only once
+                body.insertBefore(message, boardElement);  
             }
             message.textContent = "Invalid move! Try again.";
             console.log("Invalid move! Try again.");
