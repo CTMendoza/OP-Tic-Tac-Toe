@@ -54,7 +54,11 @@ const gameFlow = function () {
     const switchPlayer = () => {
         if(currentPlayer === player1) {
             currentPlayer = player2
-        } else currentPlayer = player1
+            message.textContent= "Player O's Turn"
+        } else {
+            currentPlayer = player1
+            message.textContent="Player X's Turn"
+        }
         return currentPlayer;
     }
     
@@ -100,7 +104,7 @@ const gameFlow = function () {
             if(winner) {
                message.textContent = `${currentPlayer.name} is the winner!`;
                message.style.color = currentPlayer.color;
-                console.log(`${currentPlayer.name} is the winner!`);
+                disable();
                 return
             }
             if (boardFull()) {
@@ -122,7 +126,10 @@ const gameFlow = function () {
     // resets game by emptying board and changing currentPlayer back to player1
     const resetGame = () => {
         board.resetBoard();
+        board.printBoard();
         currentPlayer = player1;
+        message.textContent = `Game has been reset! Player X go!`;
+        message.style.color = 'white';
         console.log("Game has been reset!");
     };
 
@@ -134,16 +141,35 @@ const game = gameFlow();
 let message = null;
 const boardElement = document.querySelector('.board');
 const body = document.querySelector('body');
+const resetBttn = document.querySelector('.reset');
 
 const tiles = Array.from(document.getElementsByClassName('tile'));
 
-console.log(tiles);
-
 tiles.forEach((tile, index) => {
     tile.addEventListener('click', () => {
-        console.log(`clicked tile ${tile} `);
         game.playRound(index);
     })
+})
+
+// clears the board on the webpage
+function clearBoard () {
+    tiles.forEach(tile => {
+        tile.textContent = ''; 
+    });
+}
+
+// when a player wins, disable the ability to add new markers to remaining empty tiles
+function disable () {
+    tiles.forEach(tile => {
+        if(tile.textContent === '') {
+            tile.style.pointerEvents = 'none';
+        }
+    })
+}
+
+resetBttn.addEventListener('click', () => {
+    game.resetGame();
+    clearBoard();
 })
 
   
