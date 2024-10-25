@@ -90,6 +90,9 @@ const gameFlow = function () {
     
     // plays a round of tic-tac-toe
     const playRound = function (index) {
+
+        if (gameOver) return;
+
         if(board.setMarker(index,currentPlayer.sign)) {
             board.printBoard();
             tiles[index].textContent = `${currentPlayer.sign}`;
@@ -104,12 +107,13 @@ const gameFlow = function () {
             if(winner) {
                message.textContent = `${currentPlayer.name} is the winner!`;
                message.style.color = currentPlayer.color;
-                disable();
-                return
+               gameOver = true;
+               return
             }
             if (boardFull()) {
                 message.textContent = "It's a tie!";
                 console.log("It's a tie!");
+                gameOver = true;
                 return;
             }
              switchPlayer();
@@ -128,9 +132,11 @@ const gameFlow = function () {
         board.resetBoard();
         board.printBoard();
         currentPlayer = player1;
+        gameOver = false;
         message.textContent = `Game has been reset! Player X go!`;
         message.style.color = 'white';
         console.log("Game has been reset!");
+        clearBoard();
     };
 
     return {playRound, resetGame, switchPlayer, currentPlayer};
@@ -139,11 +145,14 @@ const gameFlow = function () {
 const game = gameFlow();
 
 let message = null;
+let gameOver = false;
 const boardElement = document.querySelector('.board');
 const body = document.querySelector('body');
 const resetBttn = document.querySelector('.reset');
 
 const tiles = Array.from(document.getElementsByClassName('tile'));
+
+
 
 tiles.forEach((tile, index) => {
     tile.addEventListener('click', () => {
@@ -167,9 +176,9 @@ function disable () {
     })
 }
 
+
 resetBttn.addEventListener('click', () => {
     game.resetGame();
-    clearBoard();
 })
 
   
